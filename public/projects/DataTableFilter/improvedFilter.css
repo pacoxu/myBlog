@@ -1,0 +1,33 @@
+.improved-judge{
+    width: 100%;
+    height: 2em;
+    margin:8px 0 8px 0;
+}
+
+
+.improved-keyword{
+    width: 100%;
+    height: 2em;
+    margin:0 0 8px 0;
+}
+
+.improved-max{
+    width: 100%;
+    height: 2em;
+    margin:8px 0 8px 0;
+}
+
+.improved-min{
+    width: 100%;
+    height: 2em;
+    margin:0 0 8px 0;
+}
+
+
+.improved{
+    margin:0 10px 8px 0px;
+}
+/*取消chrome中自带的outline样式*/
+th.sorting{
+    outline: none;
+}

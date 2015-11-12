@@ -1,0 +1,8 @@
+section#articles
+    ul#articles-ul
+        each item in articleList
+            if currentPage==="/" ||currentPage===item.category
+                li
+                    span.date=item.date
+                    a(href=item.href)=item.title
+                    p=item.discription

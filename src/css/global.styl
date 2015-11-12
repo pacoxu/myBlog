@@ -1,0 +1,84 @@
+page_width=960px
+nav_height=2em
+bg_src="../../images/bg.png"
+bg_color=#eeffff
+font_color=#ffcc88
+hover_color=#99ccff
+font="微软雅黑"
+text_color=#666
+
+@import('sons-of-obsidian.css')
+
+
+*
+	margin:0
+	padding:0
+	font-family:font
+	color:text_color
+ul
+	list-style:none
+
+pre
+	background:#333
+	padding:1em
+
+body
+	background-color:#fff
+	nav 
+		margin:0 auto
+		width:page_width
+		img
+			width:page_width
+			height:240px
+			box-shadow:gray 0px 4px 5px 
+			border-radius:5px
+	#container
+		position:relative
+		display:flex
+		align-items: flex-start
+		width:page_width
+		margin:0 auto
+		padding:30px
+		section
+			flex:8
+		aside
+			flex:1
+			margin:0em 2em
+			display:flex
+			flex-direction:column
+			#aside-ul
+				width:6em
+				margin:0
+				li
+					width:3em
+					font-size:1.5em
+					padding-left:1em
+					margin:1em 0em
+					text-align:center
+					cursor:pointer
+					color:font_color
+					&.selected
+						border-left:3px solid font_color
+					a
+						color:font_color
+						text-decoration:none
+				li:hover
+					border-left:3px solid hover_color
+					&.selected
+						border-left:3px solid font_color
+						a
+							color:font_color
+							cursor:auto
+					a
+						color:hover_color
+		footer
+			position:absolute
+			display:block
+			bottom:0
+			width:100%
+			left:0
+			text-align:center
+			color:#ccc
+			font-size:0.8em
+			border-top:#999 dashed 1px
+			padding-top:10px

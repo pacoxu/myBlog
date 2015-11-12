@@ -1,0 +1,305 @@
+&原作者：Jack Franklin
+原文：Embracing Promises in JavaScript'
+
+
+在这篇文章中我们会学习如何使用promise来写出更优雅的异步代码。这篇文章并不会完整深入地介绍promise。如果你想要深入了解promise，可以阅读Jake Archibald在HTML5 Rocks上发布的文章。我强烈推荐。
+
+我会使用es6-promise 的库。我所有的代码都在Node.js上运行，但是它们在浏览器环境中应该一样可以运行。在这篇文章中，你所见到的Promise，都是通过polyfill实现的。但是如果当你阅读这篇文章时，promise已经被浏览器普遍支持了的话（译者注：截至2015-11-7，Chrome和FireFox都已经支持promise，IE11尚不支持），这篇文章所介绍的技术也依然可行。
+
+
+#错误处理
+
+
+我们首先来看看如何用promise来处理错误。这是人们经常会问的问题，也让很多人头疼。看看下面这段代码，当它运行时，会输出什么结果呢？
+
+
+*var someAsyncThing = function() {
+  return new Promise(function(resolve, reject) {
+    // this will throw, x does not exist
+    resolve(x + 2);
+  });
+};
+
+someAsyncThing().then(function() {
+  console.log('everything is great');
+});
+
+
+你也许觉得它会抛出一个错误，因为x不存在。如果你把这段有x的代码写在promise外面，那确实会这样。但是，我们的这段代码什么结果也不会输出。（译者注：Chrome会报错，并指明错误发生在promise中。FireFox不会。）既不会在控制台输出任何内容，也不会抛出错误。在一个promise里，任何抛出的错误都会被拦截，被当做promise的reject来处理。所以，我们只有用catch才能看到错误的内容。
+
+*someAsyncThing().then(function() {
+  console.log('everything is great');
+}).catch(function(error) {
+  console.log('oh no', error);
+});
+
+
+现在，运行的结果是：
+
+
+*oh no ReferenceError: x is not defined
+
+
+你也许想知道错误是怎么被处理的。试试下面的代码：
+
+
+*var someAsyncThing = function() {
+ return new Promise(function(resolve, reject) {
+    // this will throw, x does not exist
+    resolve(x + 2);
+  });
+};
+var someOtherAsyncThing = function() {
+  return new Promise(function(resolve, reject) {
+    reject('something went wrong');
+  });
+};
+someAsyncThing().then(function() {
+  return someOtherAsyncThing();
+}).catch(function(error) {
+  console.log('oh no', error);
+});
+
+
+这里我们还是会得到 oh no [ReferenceError: x is not defined]，因为someAsyncThing被reject了。 然而，如果someAsyncThing成功resolve了，我们就会看到someOtherAsyncThing被reject的结果。
+
+
+*var someAsyncThing = function() {
+  return new Promise(function(resolve, reject) {
+    var x = 2;
+    resolve(x + 2);
+  });
+};
+var someOtherAsyncThing = function() {
+  return new Promise(function(resolve, reject) {
+    reject('something went wrong');
+  });
+};
+	
+someAsyncThing().then(function() {
+  return someOtherAsyncThing();
+}).catch(function(error) {
+  console.log('oh no', error);
+});
+
+
+现在，我们会得到oh no something went wrong。当一个promise被reject，会调用第一个catch函数。
+
+另一个要注意的地方是，catch没什么特别的。它只是一个当promise被reject时会调用的方法，它不会阻止后续的代码运行。
+
+
+
+*someAsyncThing().then(function() {
+  return someOtherAsyncThing();
+}).catch(function(error) {
+  console.log('oh no', error);
+}).then(function() {
+  console.log('carry on');
+});
+
+
+在上面的这段代码中，carry on还是会被输出。当然啦，如果在catch里面出错，那就是另一回事了。
+
+
+*someAsyncThing().then(function() {
+  return someOtherAsyncThing();
+}).catch(function(error) {
+  console.log('oh no', error);
+  // y is not a thing!
+  y + 2;
+}).then(function() {
+  console.log('carry on');
+}).catch(function(error){
+console.log('hhh'+error);});
+
+
+这次catch里面的代码运行了，但是carry on没有输出，因为在catch里面抛出了一个错误。注意，这里还是没有输出错误的内容。如果你在最后加了一个另一个catch，catch函数会运行，因为当promise链中的一个回调函数抛出了错误，那么就会运行接下来那个catch函数。
+
+
+#Promise链
+
+
+这一部分是受我最近的一个项目启发而来的。那个项目需要给客户端添加输出CSV功能。当时我用的是AngularJS的$q框架，但是我这里重写一次，以作为例子。
+
+
+输出一个CSV需要以下几个步骤：
+
+从API获得创建CSV文件需要的数据（可能要发送多个请求）
+
+把数据传递给处理数据的对象
+
+把数据写入CSV
+
+告诉用户他们的CSV有没有成功创建
+
+
+我不打算涉及具体的业务逻辑代码，我想在更抽象的层面上来用promise实现一个健壮的处理错误的解决方案。在像这样复杂的操作中，每个步骤都可能会出现错误（API可能会不能用、解析数据的时候会出错、CSV没有正确保存等等）。而通过合理地使用then和catch，promise则能够很好的处理这些错误。
+
+
+接下来我们会大量使用promise链。promise链是我认为这篇文章中最有价值的东西，不过它需要一些时间来适应——一开可能会觉得它有那么点奇怪。正如Jake Archibald（没错，又是这家伙）所说的：
+
+
+&“当你通过then的回调返回什么东西时，神奇的事情发生了。如果你返回的是一个值，那下一个then就会接受这个值并运行。然而，如果你返回了一个promise对象，那么下一个then就会等待promise直到promise的状态确定下来（成功或失败）。“
+重要的事情说两遍，如果想深入了解promise，我不能更推荐这篇文章。
+
+
+让我们先定义一个简单的函数，这个函数只会返回一些数据。在实际的应用中，这可能会是一个http请求或者什么东西。在我们的例子中，50毫秒后，promise会resolve一个用户信息的数组，我们要把这些信息存入CSV。
+
+
+*var fetchData = function() {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      resolve({
+        users: [
+          { name: 'Jack', age: 22 },
+          { name: 'Tom', age: 21 },
+          { name: 'Isaac', age: 21 },
+          { name: 'Iain', age: 20 }
+        ]
+      });
+    }, 50);
+  });
+}
+
+
+接下来，我们我们要处理这些信息。这次会立刻resolve数据，但是在实际应用中可能会做更多的事情。
+
+
+*var prepareDataForCsv = function(data) {
+  return new Promise(function(resolve, reject) {
+    // imagine this did something with the data
+    resolve(data);
+  });
+};
+
+
+有一件事很重要：在这个例子中（并且在实际应用中），prepareDataForCsv 所做的事情都不是异步的。没有必要把它放在promise里。但是当一个函数成为了一个巨大函数链的一部分，那么把它放在promise里就会很方便，因为通过promise你就可以在一个地方处理所有的错误，而不是再在别的地方用老办法try{}catch解决。
+
+
+最后，我们要把信息写入CSV。
+
+
+*var writeToCsv = function(data) {
+  return new Promise(function(resolve, reject) {
+    // write to CSV
+    resolve();
+  });
+};
+
+
+然后把所有方法连在一起。
+
+
+*fetchData().then(function(data) {
+  return prepareDataForCsv(data);
+}).then(function(data) {
+  return writeToCsv(data);
+}).then(function() {
+  console.log('your csv has been saved');
+});
+
+
+这样看起来很简洁，读起来也很容易。整个程序的逻辑和顺序都很清晰。但我们还可以把它变得更整洁。如果你的函数只需要一个参数，你可以直接用then传递这个参数，而不用通过回调函数来传递：
+
+
+*fetchData().then(prepareDataForCsv).then(writeToCsv).then(function() {
+  console.log('your csv has been saved');
+});
+
+
+记住，无论内在的代码多么复杂，高层面（High Level）的API一定要保持简洁。这就是我喜欢promise的一个原因，一旦你习惯了用它，你的代码就会变得非常易读和优雅。
+
+
+然而，目前我们还没有添加处理错误的函数，不过我们只需要一点点额外的代码就行了：
+
+
+*fetchData().then(prepareDataForCsv).then(writeToCsv).then(function() {
+  console.log('your csv has been saved');
+}).catch(function(error) {
+  console.log('something went wrong', error);
+});
+
+
+Promise链的工作原理，让我们只需要用一个catch就可以捕获到所有抛出的错误。这让错误处理变得非常直接。
+
+
+为了演示这一点，我们来让prepareDataForCsv 抛出一个错误。
+
+
+*var prepareDataForCsv = function(data) {
+  return new Promise(function(resolve, reject) {
+    // imagine this did something with the data
+    reject('data invalid');
+  });
+};
+
+
+现在运行这段代码就会输出错误。这真的很cool~。prepareDataForCsv 在整个promise链的中间，但是我们不用做额外的事情就可以处理这个错误。另外，这个catch不仅会捕获我们自己触发的错误，还会捕获其他的抛出的意外的错误。这样即使某个极端情况触发了一个错误，用户依然可以按原来的逻辑处理错误。
+
+
+另一种很有效方法是：把原来需要data作为参数的函数变成以promise对象为参数并且resolve data的函数。让我们还是以prepareDataForCsv 为例子。
+
+
+*var prepareDataForCsv = function(dataPromise) {
+  return dataPromise().then(function(data) {
+    return data;
+  });
+};
+
+
+我们发现这种模式非常好，它可以让代码更整洁更抽象（generic ）——在一个到处都是异步方法的应用中，与其等着promise对象resolve以后再传递数据，不如直接传递promise对象本身，这样更简单。
+
+
+这样修改以后，新的代码就是这样：
+
+
+*prepareDataForCsv(fetchData).then(writeToCsv).then(function() {
+  console.log('your csv has been saved');
+}).catch(function(error) {
+  console.log('something went wrong', error);
+});
+
+
+这种做法的好处是，处理错误的逻辑不用改变。FetchData会以任何形式reject，而且error仍旧会被最后的catch处理。你会发现promise真的非常好用。
+
+#Promise的回调
+
+
+我们常常面临一个问题：在我们从API获取数据时，可能需要发送多个请求。这是因为我们把API请求分成了几块，如果你需要更多的数据，你就要发送多个请求。所幸我们的API会告诉你是否还有更多的数据要获取。在这一部分我会告诉你我们是如何用回调来加载所有的数据的。
+
+
+*var count = 0;
+var http = function() {
+  if(count === 0) {
+    count++;
+    return Promise.resolve({ more: true, user: { name: 'jack', age: 22 } });
+  } else {
+    return Promise.resolve({ more: false, user: { name: 'isaac', age: 21 } });
+  }
+};
+
+
+首先，我们有一个http函数，他会假装从API那里获取数据。（实际上Promise.resolve只会创造一个promise对象并且resolve返回你给它的东西。）当我第一次发送请求时，会得到一个user对象，同时more属性被设置为true，代表还有更多数据要获取（这和真实的API的行为不太一样，但是在这篇文章中已经够了。）当我第二次发送请求时，还是会获得一个user对象，但是这次more被设置为false了。然后我们就获得了所有我们需要的数据，一共要调用两次API。让我们写个fetchData函数来帮我们做这件事。
+
+
+*var fetchData = function() {
+  var goFetch = function(users) {
+    return http().then(function(data) {
+      users.push(data.user);
+      if(data.more) {
+        return goFetch(users);
+      } else {
+        return users;
+      }
+    });
+  }
+return goFetch([]); };
+
+
+fetchData自己做的事情很少，除了定义和调用另一个goFetch函数。goFetech接受一个包含users的数组（最初调用时传递的是一个空数组），然后调用http()，http会返回数据。新的user对象返回以后就被push到users数组里，然后函数就会判断data.more，如果它是ture就再调用自己，否则就说明没有更多数据了，直接返回users数组。最重要的一点是，每一步都要返回一些东西。fetchData 返回了goFetch，goFetch要么返回自己，要么返回users数组。只有这样才能建立起promise链。
+
+
+#总结
+
+
+Promise不是万能的，但是它将会成为处理大量异步操作的标准方法。我发现promise在处理一系列顺序复杂的异步操作的时候非常好用。如果你还没有试过的话，我强烈建议你在下个项目时尝试一下。

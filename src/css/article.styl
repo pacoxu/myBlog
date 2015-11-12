@@ -1,0 +1,38 @@
+@import("global.styl")
+
+body
+	#container
+		section#articles
+			article
+				width:100%
+				div.title
+					border-bottom:1px #ccc solid
+					margin:2em 0em
+					display:flex
+					align-items: baseline
+					h2
+						flex:6
+						color:text_color
+						font-size:1.5em
+					span.date
+						flex:1
+						width:5em
+						font-size:1.3em
+				a
+					color:font_color
+				p
+					font-family:font
+					margin:1em 0em
+					line-height:1.8em
+					font-size:1.1em
+				blockquote
+					border:1px #ddd solid
+					background:#fafafa
+					border-radius:3px
+					padding:0.5em
+					a
+						color:text_color
+				code 
+					span
+						font-size:1.3em
+						font-family:"Consolas"
