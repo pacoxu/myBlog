@@ -4,5 +4,6 @@ section#articles
             if currentPage==="/" ||currentPage===item.category
                 li
                     span.date=item.date
-                    a(href=item.href)=item.title
-                    p=item.discription
+                    div
+                        a(href=item.href)=item.title
+                        p=item.discription

@@ -4,7 +4,8 @@ html
         meta(charset="utf-8")
         title=title
         link(rel='stylesheet', href=articleCssSrc)
-    body
+        script(type="text/javascript" src=prettifyJsSrc)
+    body(onload="prettyPrint()")
         include ./_common/nav.jade
         div#container
             include ./_common/aside.jade

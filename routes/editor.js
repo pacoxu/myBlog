@@ -15,7 +15,7 @@ converter.convert = function(text) {
 }
 
 converter.makeArray = function() {
-	this.textArray = this.originText.split("\n\n")
+	this.textArray = this.originText.split("\r\n\r\n")
 }
 
 converter.format = function(text) {

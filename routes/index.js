@@ -9,7 +9,6 @@ settings.articleList=db
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	settings.currentPage=req.originalUrl
-	console.log(settings.currentPage)
     res.render('index', settings);
 });
 

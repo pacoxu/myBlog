@@ -37,7 +37,6 @@ router.get('/*', function(req, res, next) {
         //get article content
         var content = new Buffer(data).toString()
         content = editor.convert(content)
-        console.log(req.originalUrl)
         //get article file name
         settings.name=req.originalUrl.split("/")[3]
         settings.text = content

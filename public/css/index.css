@@ -31,7 +31,7 @@ body #container {
   align-items: flex-start;
   width: 960px;
   margin: 0 auto;
-  padding: 30px;
+  padding-bottom: 5em;
 }
 body #container section {
   flex: 8;
@@ -85,27 +85,29 @@ body #container footer {
   color: #ccc;
   font-size: 0.8em;
   border-top: #999 dashed 1px;
-  padding-top: 10px;
+  padding: 1em 0;
 }
 body #container section#articles {
   flex: 7;
   margin: 30px;
 }
 body #container section#articles ul#articles-ul li {
-  margin: 1em;
+  margin-bottom: 1em;
+  display: flex;
 }
 body #container section#articles ul#articles-ul li span.date {
   font-size: 1.3em;
   color: #ccc;
+  flex: 1;
 }
-body #container section#articles ul#articles-ul li a {
+body #container section#articles ul#articles-ul li div {
+  flex: 4;
+}
+body #container section#articles ul#articles-ul li div a {
   text-decoration: none;
   color: #fc8;
   font-size: 1.3em;
 }
-body #container section#articles ul#articles-ul li a:hover {
+body #container section#articles ul#articles-ul li div a:hover {
   color: #9cf;
-}
-body #container section#articles ul#articles-ul li p {
-  margin-left: 6.5em;
 }

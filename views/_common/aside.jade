@@ -1,7 +1,7 @@
 aside
     ul#aside-ul
         each item in asideList
-            if currentPage==="item.url"
+            if currentPage===item.url
                 li.selected
                     a=item.name
             else
