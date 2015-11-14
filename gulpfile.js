@@ -2,6 +2,7 @@ var gulp = require("gulp")
 var stylus = require("gulp-stylus")
 var browserSync = require("browser-sync").create()
 var babel = require("gulp-babel")
+var uglify = require("gulp-uglify")
 
 var _dist = "./public"
 gulp.task("stylus", function() {
@@ -13,6 +14,7 @@ gulp.task("stylus", function() {
 gulp.task("js", function() {
 	gulp.src('./src/js/*')
 		.pipe(babel())
+		.pipe(uglify())
 		.pipe(gulp.dest(_dist + '/js'))
 })
 
