@@ -1,1 +1,0 @@
-"use strict";var converter={originText:""};converter.getText=function(){this.originText=document.getElementById("text")},converter.makeArray=function(t){for(var e in t)t=this.originText.split("\n"),t.length<2&&(t=this.originText.split("\r\n")),this.makeArray(t[e])};
