@@ -1,4 +1,12 @@
 var data={
+    MaxHeightCSS3Transition:{
+        date:"2015-11-20",
+        category:"/article/techs",
+        href:"/article/techs/MaxHeightCSS3Transition",
+        title:"通过CSS动画设置max-height实现自适应伸展div动画效果",
+        discription:"通过CSS动画设置max-height实现自适应伸展div动画效果",
+        css:"MaxHeightCSS3Transition.css",
+    },
     EmbracingPromisesInJavaScript:{
         date:"2015-11-07",
         category:"/article/techs",
