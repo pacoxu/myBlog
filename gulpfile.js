@@ -20,11 +20,13 @@ gulp.task("js", function() {
 
 gulp.task('sync', function() {
 	browserSync.init({
-		server: {
-			baseDir: "./"
-		}
+		proxy: "http://localhost:3000",
+		port:4000
 	})
 })
+
+gulp.task("build",["stylus","js"])
+
 
 gulp.task("serve", ["stylus", "sync"], function() {
 	gulp.watch("src/css/*", ['stylus'])
@@ -32,4 +34,4 @@ gulp.task("serve", ["stylus", "sync"], function() {
 	gulp.watch(["*.html", "./src/css/*", "./src/js/*"]).on("change", browserSync.reload)
 })
 
-gulp.task("default", ["stylus", "js"])
+gulp.task("default", ["serve"])

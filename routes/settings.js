@@ -4,6 +4,7 @@ var data={
     indexCssSrc:"./static/css/index.css",
     articleCssSrc:"./static/css/article.css",
     prettifyJsSrc:"./static/js/prettify.js",
+    cssPrefix:"./static/css/",
     asideList:[
         {
             name:"首页",
@@ -21,45 +22,7 @@ var data={
             name:"文艺",
             url:"/article/literature",
         }
-    ],
-    articleList:[
-        {
-            date:"2015-11-7",
-            href:"EmbracingPromisesInJavaScript",
-            title:"在JavaScript中使用Promise",
-            discription:"Embracing Promises In JavaScript译文。原作者：Jack Franklin",
-        },
-        {
-            date:"2015-11-7",
-            href:"article/techs/EmbracingPromisesInJavaScript",
-            title:"在JavaScript中使用Promise",
-            discription:"Embracing Promises In JavaScript译文。原作者：Jack Franklin",
-        },
-        {
-            date:"2015-11-7",
-            href:"article/techs/EmbracingPromisesInJavaScript",
-            title:"在JavaScript中使用Promise",
-            discription:"Embracing Promises In JavaScript译文。原作者：Jack Franklin",
-        },
-        {
-            date:"2015-11-7",
-            href:"article/techs/EmbracingPromisesInJavaScript",
-            title:"在JavaScript中使用Promise",
-            discription:"Embracing Promises In JavaScript译文。原作者：Jack Franklin",
-        },
-        {
-            date:"2015-11-7",
-            href:"article/techs/EmbracingPromisesInJavaScript",
-            title:"在JavaScript中使用Promise",
-            discription:"Embracing Promises In JavaScript译文。原作者：Jack Franklin",
-        },
-        {
-            date:"2015-11-7",
-            href:"article/techs/EmbracingPromisesInJavaScript",
-            title:"在JavaScript中使用Promise",
-            discription:"Embracing Promises In JavaScript译文。原作者：Jack Franklin",
-        },
-    ],
+    ]
 }
 
 module.exports = data
