@@ -1,0 +1,1 @@
+"use strict";window.onload=function(e){console.log("loaded!");for(var o=document.querySelectorAll("code"),t=o.length-1;t>=0;t--)o[t].className="prettyprint";prettyPrint()};

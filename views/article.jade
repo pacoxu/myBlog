@@ -5,7 +5,8 @@ html
         title=title
         link(rel='stylesheet', href=articleCssSrc)
         script(type="text/javascript" src=prettifyJsSrc)
-    body(onload="prettyPrint()")
+        script(type="text/javascript" src=initJsSrc)
+    body
         include ./_common/nav.jade
         div#container
             include ./_common/aside.jade

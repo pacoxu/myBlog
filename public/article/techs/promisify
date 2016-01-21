@@ -184,8 +184,10 @@ function excute(asyncs,args) {
 
         } else {
 
-            //因为如果在按照上面的方法做的话，asyncs[i].apply(null,[args])会立刻执行
-            //结果就还是会按照异步顺序来执行了，then只能接受待执行的方法，而不能接受运行结果
+            //因为如果在按照上面的方法做的话，
+            //asyncs[i].apply(null,[args])会立刻执行
+            //结果就还是会按照异步顺序来执行了，
+            //then只能接受待执行的方法，而不能接受运行结果
             promise = promise.then(asyncs[i])
 
         }

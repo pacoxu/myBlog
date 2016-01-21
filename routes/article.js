@@ -36,7 +36,8 @@ router.get('/*', function(req, res, next) {
     fileExist("public" + req.originalUrl).then(readFile).then(function(data) {
         //get article content
         var content = new Buffer(data).toString()
-        content = editor.convert(content)
+        // 以前需要转换markdown，现在源文件已经是html了
+        // content = editor.convert(content)
         //get article file name
         settings.name=req.originalUrl.split("/")[3]
         settings.text = content

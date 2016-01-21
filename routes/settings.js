@@ -4,6 +4,7 @@ var data={
     indexCssSrc:"./static/css/index.css",
     articleCssSrc:"./static/css/article.css",
     prettifyJsSrc:"./static/js/prettify.js",
+    initJsSrc:"./static/js/js.js",
     asideList:[
         {
             name:"首页",
