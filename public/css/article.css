@@ -134,6 +134,9 @@ body #container section#articles article blockquote {
 body #container section#articles article blockquote a {
   color: #666;
 }
+body #container section#articles article pre {
+  margin: 1em 0;
+}
 body #container section#articles article code span {
   font-size: 1.1em;
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;

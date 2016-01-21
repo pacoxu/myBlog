@@ -4,6 +4,8 @@ html
         meta(charset="utf-8")
         title=title
         link(rel='stylesheet', href=articleCssSrc)
+        if css!==''
+            link(rel='stylesheet', href=cssPrefix+css)
         script(type="text/javascript" src=prettifyJsSrc)
         script(type="text/javascript" src=initJsSrc)
     body

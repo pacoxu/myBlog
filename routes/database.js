@@ -6,6 +6,14 @@ var data={
         title:"如何在JS中按顺序执行若干个异步函数",
         discription:"利用promise实现按数组顺序同步执行若干个同步或异步函数并返回。",
     },   
+    MaxHeightCSS3Transition:{
+        date:"2015-11-20",
+        category:"/article/techs",
+        href:"/article/techs/MaxHeightCSS3Transition",
+        title:"通过CSS动画设置max-height实现自适应伸展div动画效果",
+        discription:"通过CSS动画设置max-height实现自适应伸展div动画效果",
+        css:"MaxHeightCSS3Transition.css",
+    },
     EmbracingPromisesInJavaScript:{
         date:"2015-11-07",
         category:"/article/techs",

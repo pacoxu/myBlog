@@ -15,7 +15,7 @@ router.get('/*', function(req, res, next) {
                 if (ok) {
                     resolve(url)
                 } else {
-                    reject("no file")
+                    reject("no file "+url)
                 }
             })
         })
@@ -41,6 +41,7 @@ router.get('/*', function(req, res, next) {
         //get article file name
         settings.name=req.originalUrl.split("/")[3]
         settings.text = content
+        settings.css = db[settings.name].css||''
         settings.title=db[settings.name].title
         settings.date=db[settings.name].date
         settings.currentPage=currentPage
