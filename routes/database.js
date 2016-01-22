@@ -1,5 +1,5 @@
 var data={
-    Promisify:{
+    promisify:{
         date:"2016-01-21",
         category:"/article/techs",
         href:"/article/techs/promisify",
