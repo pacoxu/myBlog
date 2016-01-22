@@ -2,7 +2,7 @@ var data={
     Promisify:{
         date:"2016-01-21",
         category:"/article/techs",
-        href:"/article/techs/Promisify",
+        href:"/article/techs/promisify",
         title:"如何在JS中按顺序执行若干个异步函数",
         discription:"利用promise实现按数组顺序同步执行若干个同步或异步函数并返回。",
     },   
