@@ -1,9 +1,13 @@
-FROM node:4.0.0
+FROM node:4.2.3
 
-RUN npm install -g gulp stylus
+ADD . /src
 
-RUN npm install 
+RUN cd /src; ls ; npm install
 
-RUN PORT=80 pm2 start bin/www --name "blog"
+RUN cd /src; npm install gulp stylus pm2 -g
 
-CMD [ "bash" ,  "-c" , "grunt build ; forever dist/server/app.js"]
+RUN cd /src; gulp build
+
+EXPOSE 80
+
+CMD ["bash","pm2 start /src/bin/www"]
