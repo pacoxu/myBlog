@@ -10,10 +10,10 @@ COPY . /usr/src/app
 
 RUN npm install
 
-RUN npm install -g gulp pm2 stylus
+RUN npm install -g gulp stylus
 
 RUN gulp build
 
 EXPOSE 80
 
-ENTRYPOINT pm2 start bin/www
+ENTRYPOINT node bin/www
