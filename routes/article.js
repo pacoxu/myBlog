@@ -7,7 +7,7 @@ var db = require("./database.js")
 
 /* GET home page. */
 router.get('/*', function(req, res, next) {
-    currentPage="/"+req.originalUrl.split("/")[2]
+    currentPage="/article/"+req.originalUrl.split("/")[2]
 
     var fileExist = function(url) {
         return new Promise(function(resolve, reject) {

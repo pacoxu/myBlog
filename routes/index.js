@@ -9,6 +9,7 @@ settings.articleList=db
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	settings.currentPage=req.originalUrl
+	settings.title="瞬光的博客"
     res.render('index', settings);
 });
 
