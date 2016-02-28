@@ -1,4 +1,11 @@
 var data={
+    git:{
+        date:"2016-02-28",
+        category:"/article/techs",
+        href:"/article/techs/git",
+        title:"Git学习笔记",
+        discription:"我的Git学习笔记",
+    },
     promisify:{
         date:"2016-01-21",
         category:"/article/techs",
