@@ -1,5 +1,4 @@
-##Git的对象类型
-
+#Git的对象类型
 1. blog：包含文件的内容。
 2. tree：包含blob的id（SHA1）和路径名字，文件的路径名。
 3. commit：保存每一次提交的元数据。指向一个tree对象。
@@ -9,33 +8,32 @@
 
 Git只存储文件的内容，也就是blob，而不存储目录结构。Git把路径名存储在tree对象中，以此重建目录的结构。的并不是每次提交的差异，而是文件的内容。但是GIt也有一种叫打包文件的存储机制，这种机制能够计算文件的差异，并且只存储差异。
 
-##Git的命令
 
-*git rm*
+#Git的命令
+
+##git rm
 
 1.git rm会删除索引中的和目录中的文件
 2.git rm --cached只会删除索引中的文件
 
-##.gitignore的格式
+#.gitignore的格式
 
 1. ' / '：src/ 可以匹配src和src的子目录
 2. ' * '：通配符
-
-##符号引用
+#符号引用
  
 符号引用是相对于SHA1而言的，分支名称、标签名称都算是符号引用。
 
-*特殊的符号引用*
+##特殊的符号引用
 
 1.HEAD：始终指向当前分支的最近提交。
 2.ORIG_HEAD：
 3.FETCH_HEAD：
 4:MERGE_HEAD：
 
-*相对提交名*
+##相对提交名
 
-##git bisect
-
+#git bisect
 这个命令会开始一个二分搜索。有时候代码明明好好地，突然就出问题了，你也不知道到底是哪个commit导致它出问题了。这个时候就可以用这个命令查出到底是哪个commit出问题。
 
 1.git bisect start：开始查找
@@ -45,3 +43,40 @@ Git只存储文件的内容，也就是blob，而不存储目录结构。Git把�
 5.git bisect replay：如果迷失了，可以重新开始
 6.git bisect visualize：可视化地检查提交范围内的内容
 7.git bisect reset：最后找到出错的commit后，要结束bisect。因为整个bisect过程都是在一个分离的HEAD上执行的。
+
+#git reset
+
+1. --soft：把HEAD移动到一个指定的分支上，工作目录 里的文件不会变
+2. --hard：把工作目录变成指定分支的样子
+3. --mixed：默认的选项，把HEAD移动到指定分支，同时把索引变成上一次暂存的样子，但是工作目录内容不变。
+
+
+#git cherry-pick
+把另一个分支里的某个提交合并到当前的分支上。
+
+#git rebase（变基）
+
+假如你有一个基于master创建的分支a，你在a上进行了一些提交，并且master之后也有了一些新的提交。这个时候执行git rebase master，就会在master的最新的提交的基础上，把a分支上所有的提交重新再提交一遍，同时master分支保持不变。
+rebase会产生一系列新的提交，它们有不同的ID。
+
+实际上rebase并不是一定要基于某个分支来rebase，也可以指定某个提交来rebase（其实分支指的就是这个分支上最新的提交）。比如说也可以git rebase master~3，这样就是在master分支倒数第三个递交的基础上，重新提交a分支的提交。
+
+另外，在git pull的时候也可以增加--rebase参数，这会把本地的提交变基到拉取分支最新的提交上。
+
+##git rebase -i（交互式变基）
+
+交互式变基可以修改一个分支，然后把他们放回原来的分支或者不同的分支。通过交互式变基，可以重新排序、变基、删除、合并、分离提交。
+
+比如说你在一个分支上有a,b,c,d四个提交。现在你想按照dcba的顺序重新提交一遍。你就可以git rebase -i a。
+
+#git stash（贮藏）
+
+当你工作时，突然来了一个紧急任务。你需要放下当前工作，去处理新的任务。这时你可以用git stash保存你现在工作的状态，并且把你工作目录的恢复到干净的状态。
+
+1. git stash save [comments]：保存状态。--include-untracked可以把未追踪的文件一起保存。
+2. git stash pop：恢复上一个状态，并将其删除。
+3. git stash apply：恢复上一个状态，但不删除。
+4. git stash drop：删除上一个状态。
+5. git stash list：由近及远列出状态栈。
+
+git stash实际上会维护一个状态栈。你可以多次git stash save，但是每次apply都会apply到最近save的那个状态。
