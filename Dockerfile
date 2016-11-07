@@ -8,7 +8,7 @@ COPY package.json /usr/src/app/
 
 COPY . /usr/src/app
 
-RUN npm install
+RUN npm config set registry http://registry.npmjs.org/ && npm install
 
 RUN npm install -g gulp stylus
 
